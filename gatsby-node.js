@@ -41,3 +41,30 @@ module.exports.createPages = async ({ graphql, actions }) => {
     })
   })
 }
+
+module.exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions
+  const productTemplate = path.resolve("./src/templates/productTemplate.jsx")
+  const response = await graphql(`
+    query {
+      allDataJson {
+        nodes {
+          products {
+            name
+          }
+        }
+      }
+    }
+  `)
+
+  response.data.allDataJson.edges.node.products.forEach(product => {
+    createPage({
+      component: productTemplate,
+      path: `/store/${product.title}`,
+      context: {
+        slug: products.title,
+      },
+    })
+    console.log(edge.node.products)
+  })
+}
